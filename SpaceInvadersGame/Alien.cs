@@ -15,7 +15,7 @@ namespace SpaceInvadersGame
         private double positionY;
 
         private int damageDealt = 100;
-        private int health = 300;
+        private int health = 200;
 
         private bool alive = true;
 
@@ -81,7 +81,7 @@ namespace SpaceInvadersGame
 
         public void move()
         {
-            this.positionY += 0.3;
+            this.positionY += 0.2;
         }
 
         public void shoot()

@@ -75,11 +75,11 @@ namespace SpaceInvadersGame
             }
             else if (direction == 2) // Move right
             {
-                this.positionX += 20;
+                this.positionX += 15;
 
                 if (this.positionX + this.width > rightSide) // Player has moved too far right
                 {
-                    this.positionX -= 20;
+                    this.positionX -= 15;
                 }
             }
         }

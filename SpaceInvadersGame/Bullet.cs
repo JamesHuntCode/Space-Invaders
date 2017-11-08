@@ -70,9 +70,12 @@ namespace SpaceInvadersGame
             this.positionY -= 6;
         }
 
-        public void hitTarget()
+        public void notActive()
         {
+            this.active = false;
 
+            this.height = 0;
+            this.width = 0;
         }
     }
 }

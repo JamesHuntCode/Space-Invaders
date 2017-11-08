@@ -19,13 +19,15 @@ namespace SpaceInvadersGame
             this.KeyDown += this.Form1_KeyDown;
         }
 
-        Graphics spaceInvanders;
+        Graphics spaceInvanders; // Set up graphics
 
-        Canon playerIcon;
+        Canon playerIcon; // Initialize player
 
-        List<List<Alien>> Aliens = new List<List<Alien>>();
+        List<List<Alien>> Aliens = new List<List<Alien>>(); // Array list of the different waves of aliens
 
-        List<Bullet> Bullets = new List<Bullet>();
+        List<Shelter> Shelters = new List<Shelter>(); // Array list of shelters for the player to hide behind
+
+        List<Bullet> Bullets = new List<Bullet>(); // Dynamic array list of bullets 
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -33,53 +35,63 @@ namespace SpaceInvadersGame
 
             // Create multiple array lists that represent the waves of aliens that come towards the player:
 
-            int offsetX = this.picCanvas.Width / 12;
+            int offsetX = 180; // Set offset value
 
             List<Alien> row1 = new List<Alien>();
 
             for (int i = 0; i < 8; i++)
             {
                 row1.Add(new Alien(25, 50, offsetX, 0));
-                offsetX += 100;
+                offsetX += 70;
             }
 
             Aliens.Add(row1);
 
-            offsetX = this.picCanvas.Width / 12;
+            offsetX = 180; // Reset offset value
 
             List<Alien> row2 = new List<Alien>();
 
             for (int i = 0; i < 8; i++)
             {
                 row2.Add(new Alien(25, 50, offsetX, 50));
-                offsetX += 100;
+                offsetX += 70;
             }
 
             Aliens.Add(row2);
 
-            offsetX = this.picCanvas.Width / 12;
+            offsetX = 180;  // Reset offset value
 
             List<Alien> row3 = new List<Alien>();
 
             for (int i = 0; i < 8; i++)
             {
                 row3.Add(new Alien(25, 50, offsetX, 100));
-                offsetX += 100;
+                offsetX += 70;
             }
 
             Aliens.Add(row3);
 
-            offsetX = this.picCanvas.Width / 12;
+            offsetX = 180;  // Reset offset value
 
             List<Alien> row4 = new List<Alien>();
 
             for (int i = 0; i < 8; i++)
             {
                 row4.Add(new Alien(25, 50, offsetX, 150));
-                offsetX += 100;
+                offsetX += 70;
             }
 
             Aliens.Add(row4);
+
+            // Set up the different shelters:
+
+            int shelterOffsetX = this.picCanvas.Width / 9;
+
+            for (int i = 0; i < 4; i++)
+            {
+                Shelters.Add(new Shelter(100, 25, shelterOffsetX, this.picCanvas.Height - 100));
+                shelterOffsetX += 200;
+            }
 
             // Set up timer to control game:
 
@@ -90,13 +102,6 @@ namespace SpaceInvadersGame
             timer.Tick += new EventHandler(timer_Tick);
 
             timer.Start();
-        }
-
-        // Method used to organize the X and Y location of the aliens:
-
-        private void setFormation(Alien row)
-        {
-
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -116,7 +121,7 @@ namespace SpaceInvadersGame
 
             SolidBrush playerBrush = new SolidBrush(Color.White);
 
-            spaceInvanders.FillRectangle(playerBrush, playerIcon.getPosX(), playerIcon.getPosY(), playerIcon.getWidth(), playerIcon.getHeight());
+            spaceInvanders.FillRectangle(playerBrush, this.playerIcon.getPosX(), this.playerIcon.getPosY(), this.playerIcon.getWidth(), this.playerIcon.getHeight());
 
             // Draw aliens in rectangular formation:
 
@@ -178,6 +183,22 @@ namespace SpaceInvadersGame
                 }
             }
 
+            // Draw shelters:
+
+            SolidBrush shelterBrush = new SolidBrush(Color.White);
+
+            for (int i = 0; i < Shelters.Count; i++)
+            {
+                spaceInvanders.FillRectangle(shelterBrush, Shelters[i].getPosX(), Shelters[i].getPosY(), Shelters[i].getHeight(), Shelters[i].getWidth());
+
+                // Check shelter status:
+
+                if (Shelters[i].getHealth() <= 0)
+                {
+
+                }
+            }
+
             // Draw bullets:
 
             SolidBrush bulletBrush = new SolidBrush(Color.White);
@@ -191,9 +212,13 @@ namespace SpaceInvadersGame
                 // Enable bullet behaviours:
 
                 Bullets[i].move();
+
+                if (Bullets[i].getPosY() < 0)
+                {
+                    Bullets.Remove(Bullets[i]);
+                }
             }
         }
-    
 
         // Method used to handle the movement of the canon:
         
@@ -201,15 +226,15 @@ namespace SpaceInvadersGame
         {
             if (e.KeyCode == Keys.Left) // Move left
             {
-                playerIcon.move(1, 0, this.picCanvas.Width);
+                this.playerIcon.move(1, 0, this.picCanvas.Width);
             }
             else if (e.KeyCode == Keys.Right) // Move right
             {
-                playerIcon.move(2, 0, this.picCanvas.Width);
+                this.playerIcon.move(2, 0, this.picCanvas.Width);
             }
             else if (e.KeyCode == Keys.Up) // Fire weapon
             {
-                Bullets.Add(new Bullet(20, 3, playerIcon.getPosX() + 5, playerIcon.getPosY(), playerIcon.getDamageDealt()));
+                Bullets.Add(new Bullet(20, 3, this.playerIcon.getPosX() + 5, this.playerIcon.getPosY(), this.playerIcon.getDamageDealt()));
             }
         }
     }

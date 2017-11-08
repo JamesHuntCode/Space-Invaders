@@ -14,7 +14,9 @@ namespace SpaceInvadersGame
         private int positionX;
         private int positionY;
 
-        private int health = 1000;
+        private int health = 500;
+
+        private bool active = true;
 
         // Constructor:
 
@@ -52,6 +54,21 @@ namespace SpaceInvadersGame
         public int getHealth()
         {
             return this.health;
+        }
+
+        public bool getStatus()
+        {
+            return this.active;
+        }
+
+        // Behavioural methods:
+
+        public void destroyed()
+        {
+            this.active = false;
+
+            this.height = 0;
+            this.width = 0;
         }
     }
 }
