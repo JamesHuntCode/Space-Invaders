@@ -14,7 +14,7 @@ namespace SpaceInvadersGame
         private double positionX;
         private double positionY;
 
-        private int velocityX = 1;
+        private double velocityX = 1.5;
 
         private int damageDealt = 100;
         private int health = 200;
@@ -42,7 +42,7 @@ namespace SpaceInvadersGame
             this.positionY = y;
         }
 
-        public void setVelX(int speed)
+        public void setVelX(double speed)
         {
             this.velocityX = speed;
         }
@@ -84,7 +84,7 @@ namespace SpaceInvadersGame
             return this.alive;
         }
 
-        public int getVelX()
+        public double getVelX()
         {
             return this.velocityX;
         }
@@ -94,12 +94,7 @@ namespace SpaceInvadersGame
         public void move(int leftSide, int rightSide)
         {
             this.positionX += this.velocityX;
-
-            //if (this.positionX >= rightSide || this.positionX <= leftSide)
-            //{
-            //    this.velocityX = -this.velocityX;
-            //    this.positionY += 50;
-            //}
+            this.positionY += 0.2; 
         }
 
         public void shoot()

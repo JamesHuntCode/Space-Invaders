@@ -139,12 +139,13 @@ namespace SpaceInvadersGame
 
                 keepFormation(Aliens[0]);
 
+                // Check to see if the aliens have touched the shelters:
+
+                touchShelter(Aliens[0]);
+
                 // Check to see if aliens have reached the bottom of the sreen:
 
-                if (Aliens[0][i].reachBottom(this.picCanvas.Height))
-                {
-
-                }
+                reachBottom(Aliens[0]);
             }
 
             for (int i = 0; i < Aliens[1].Count; i++)
@@ -159,12 +160,13 @@ namespace SpaceInvadersGame
 
                 keepFormation(Aliens[1]);
 
+                // Check to see if the aliens have touched the shelters:
+
+                touchShelter(Aliens[1]);
+
                 // Check to see if aliens have reached the bottom of the sreen:
 
-                if (Aliens[1][i].reachBottom(this.picCanvas.Height))
-                {
-
-                }
+                reachBottom(Aliens[1]);
             }
 
             for (int i = 0; i < Aliens[2].Count; i++)
@@ -179,12 +181,13 @@ namespace SpaceInvadersGame
 
                 keepFormation(Aliens[2]);
 
+                // Check to see if the aliens have touched the shelters:
+
+                touchShelter(Aliens[2]);
+
                 // Check to see if aliens have reached the bottom of the sreen:
 
-                if (Aliens[2][i].reachBottom(this.picCanvas.Height))
-                {
-
-                }
+                reachBottom(Aliens[2]);
             }
 
             for (int i = 0; i < Aliens[3].Count; i++)
@@ -199,12 +202,13 @@ namespace SpaceInvadersGame
 
                 keepFormation(Aliens[3]);
 
+                // Check to see if the aliens have touched the shelters:
+
+                touchShelter(Aliens[3]);
+
                 // Check to see if aliens have reached the bottom of the sreen:
 
-                if (Aliens[3][i].reachBottom(this.picCanvas.Height))
-                {
-
-                }
+                reachBottom(Aliens[3]);
             }
 
             // Draw shelters:
@@ -283,15 +287,44 @@ namespace SpaceInvadersGame
                 {
                     for (int j = 0; j < list.Count; j++)
                     {
-                        list[j].setVelX(-1);
+                        list[j].setVelX(-1.5);
                     }
                 }
                 else if (list[i].getPosX() <= 0) // Aliens have hit the left side wall
                 {
                     for (int j = 0; j < list.Count; j++)
                     {
-                        list[j].setVelX(1);
+                        list[j].setVelX(1.5);
                     }
+                }
+            }
+        }
+
+        // Method used to remove shelters if touched by the aliens:
+
+        private void touchShelter(List<Alien> list)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                for (int j = 0; j < Shelters.Count; j++)
+                {
+                    if ((list[i].getPosY() >= (Shelters[j].getPosY() - 25)) && ((-100 <= list[i].getPosX() - Shelters[j].getPosX()) && (100 >= list[i].getPosX() - Shelters[j].getPosX())))
+                    {
+                        Shelters[j].destroyed();
+                    }
+                }
+            }
+        }
+
+        // Method used to check if any aliens have touched the bottom of the screen:
+
+        private void reachBottom(List<Alien> list)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i].reachBottom(this.picCanvas.Height))
+                {
+                    
                 }
             }
         }
