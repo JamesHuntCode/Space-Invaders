@@ -19,15 +19,15 @@ namespace SpaceInvadersGame
             this.KeyDown += this.Form1_KeyDown;
         }
 
-        Graphics spaceInvanders; // Set up graphics
+        private Graphics spaceInvanders; // Set up graphics
 
-        Canon playerIcon; // Initialize player
+        private Canon playerIcon; // Initialize player
 
-        List<List<Alien>> Aliens = new List<List<Alien>>(); // Array list of the different waves of aliens
+        private List<List<Alien>> Aliens = new List<List<Alien>>(); // Array list of the different waves of aliens
 
-        List<Shelter> Shelters = new List<Shelter>(); // Array list of shelters for the player to hide behind
+        private List<Shelter> Shelters = new List<Shelter>(); // Array list of shelters for the player to hide behind
 
-        List<Bullet> Bullets = new List<Bullet>(); // Dynamic array list of bullets 
+        private List<Bullet> Bullets = new List<Bullet>(); // Dynamic array list of bullets 
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -106,7 +106,7 @@ namespace SpaceInvadersGame
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            draw();
+            this.draw();
         }
 
         private void draw()
@@ -213,9 +213,22 @@ namespace SpaceInvadersGame
 
                 Bullets[i].move();
 
-                if (Bullets[i].getPosY() < 0)
+                if (Bullets[i].getPosY() < 0) // Bullet has gone off the top of the screen
                 {
-                    Bullets.Remove(Bullets[i]);
+                    Bullets[i].notActive();
+                }
+
+                for (int j = 0; j < Aliens.Count; j++)
+                {
+                    for (int k = 0; k < Aliens[j].Count; k++)
+                    {
+                        if ((Aliens[j][k].getPosY() >= Bullets[i].getPosY()) && ((-55 <= Aliens[j][k].getPosX() - Bullets[i].getPosX()) && (25 >= Aliens[j][k].getPosX() - Bullets[i].getPosX())) && (Bullets[i].getStatus()))
+                        {
+                            Aliens[j].Remove(Aliens[j][k]); // Remove alien
+
+                            Bullets[i].notActive(); // Remove bullet
+                        }
+                    }
                 }
             }
         }
