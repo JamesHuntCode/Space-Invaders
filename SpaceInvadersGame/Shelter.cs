@@ -29,6 +29,11 @@ namespace SpaceInvadersGame
             this.positionY = posY;
         }
 
+        public void setHealth(int amount)
+        {
+            this.health = amount;
+        }
+
         // Getter methods:
 
         public int getHeight()
