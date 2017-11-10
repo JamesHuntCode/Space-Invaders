@@ -29,6 +29,8 @@ namespace SpaceInvadersGame
 
         private List<Bullet> Bullets = new List<Bullet>(); // Dynamic array list of bullets 
 
+        private List<AlienRay> AlienRays = new List<AlienRay>(); // Dynamic list of alien rays
+
         private void Form1_Load(object sender, EventArgs e)
         {
             playerIcon = new Canon(25, 15, (this.picCanvas.Width / 2), (this.picCanvas.Height - 25));
@@ -107,6 +109,23 @@ namespace SpaceInvadersGame
         private void timer_Tick(object sender, EventArgs e)
         {
             this.draw();
+
+            shootPlayer(Aliens[3], 200);
+
+            if (Aliens[3].Count == 0)
+            {
+                shootPlayer(Aliens[2], 150);
+            }
+
+            if (Aliens[2].Count == 0 && Aliens[3].Count == 0)
+            {
+                shootPlayer(Aliens[1], 100);
+            }
+
+            if (Aliens[1].Count == 0 && Aliens[2].Count == 0 && Aliens[3].Count == 0)
+            {
+                shootPlayer(Aliens[0], 50);
+            }
         }
 
         private void draw()
@@ -133,7 +152,7 @@ namespace SpaceInvadersGame
 
                 // Enable behaviours:
 
-                Aliens[0][i].move(0, this.picCanvas.Width);
+                Aliens[0][i].move();
 
                 // Program alien behaviour for when they hit a wall:
 
@@ -154,7 +173,7 @@ namespace SpaceInvadersGame
 
                 // Enable behaviours:
 
-                Aliens[1][i].move(0, this.picCanvas.Width);
+                Aliens[1][i].move();
 
                 // Program alien behaviour for when they hit a wall:
 
@@ -175,7 +194,7 @@ namespace SpaceInvadersGame
 
                 // Enable behaviours:
 
-                Aliens[2][i].move(0, this.picCanvas.Width);
+                Aliens[2][i].move();
 
                 // Program alien behaviour for when they hit a wall:
 
@@ -196,11 +215,12 @@ namespace SpaceInvadersGame
 
                 // Enable behaviours:
 
-                Aliens[3][i].move(0, this.picCanvas.Width);
+                Aliens[3][i].move();
 
                 // Program alien behaviour for when they hit a wall:
 
                 keepFormation(Aliens[3]);
+
 
                 // Check to see if the aliens have touched the shelters:
 
@@ -269,11 +289,56 @@ namespace SpaceInvadersGame
                 {
                     if ((Shelters[j].getPosY() >= Bullets[i].getPosY()) && ((-100 <= Shelters[j].getPosX() - Bullets[i].getPosX()) && (0 >= Shelters[j].getPosX() - Bullets[i].getPosX())) && Bullets[i].getStatus())
                     {
-                        Shelters[j].setHealth(Shelters[j].getHealth() - this.playerIcon.getDamageDealt()); // Lower the shelter's damage
+                        Shelters[j].setHealth(Shelters[j].getHealth() - this.playerIcon.getDamageDealt()); // Lower the shelter's health
 
                         Bullets[i].notActive(); // Remove bullet
                     }
                 }
+            }
+
+            // Draw alien rays:
+
+            SolidBrush rayBrush = new SolidBrush(Color.Green);
+
+            for (int i = 0; i < AlienRays.Count; i++)
+            {
+                // Draw alien rays:
+
+                spaceInvanders.FillRectangle(rayBrush, AlienRays[i].getPosX(), AlienRays[i].getPosY(), AlienRays[i].getWidth(), AlienRays[i].getHeight());
+
+                // Enable alien ray behaviours:
+
+                AlienRays[i].move();
+
+                if (AlienRays[i].getPosY() >= this.picCanvas.Height) // Alien ray has gone off the top of the screen
+                {
+                    AlienRays[i].notActive();
+                }
+
+                // Check to see if the alien hit the player:
+
+                if ((AlienRays[i].getPosY() >= this.playerIcon.getPosY()) && ((0 <= AlienRays[i].getPosX() - this.playerIcon.getPosX()) && (15 >= AlienRays[i].getPosX() - this.playerIcon.getPosX())) && AlienRays[i].getStatus())
+                {
+                    AlienRays[i].notActive(); // Remove alien ray
+
+                    // Restart the game:
+
+                    Application.Restart();
+                    Environment.Exit(0);
+                }
+
+                // Check to see if the alien shot any of the shelters:
+
+                for (int j = 0; j < Shelters.Count; j++)
+                {
+                    if ((AlienRays[i].getPosY() >= Shelters[j].getPosY()) && ((-100 <= Shelters[j].getPosX() - AlienRays[i].getPosX()) && (0 >= Shelters[j].getPosX() - AlienRays[i].getPosX())) && AlienRays[i].getStatus())
+                    {
+                        Shelters[j].setHealth(Shelters[j].getHealth() - AlienRays[i].getDamageDealt()); // Lower the shelter's health
+
+                        AlienRays[i].notActive(); // Remove alien ray
+                    }
+                }
+
             }
         }
 
@@ -300,6 +365,21 @@ namespace SpaceInvadersGame
             }
         }
 
+        // Method used to allow the aliens to shoot at the player:
+
+        private void shootPlayer(List<Alien> list, int chance)
+        {
+            Random rnd = new Random();
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (rnd.Next(0, chance) == 10)
+                {
+                    AlienRays.Add(new AlienRay(20, 3, (Convert.ToInt32(list[i].getPosX()) + (list[i].getWidth() / 2)), Convert.ToInt32(list[i].getPosY()), list[i].getDamageDealt()));
+                }
+            }
+        }
+
         // Method used to remove shelters if touched by the aliens:
 
         private void touchShelter(List<Alien> list)
@@ -322,9 +402,11 @@ namespace SpaceInvadersGame
         {
             for (int i = 0; i < list.Count; i++)
             {
-                if (list[i].reachBottom(this.picCanvas.Height))
+                if (list[i].reachBottom(this.picCanvas.Height - 25))
                 {
-                    
+                    // Restart the game:
+                    Application.Restart();
+                    Environment.Exit(0);
                 }
             }
         }

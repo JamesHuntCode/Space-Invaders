@@ -67,7 +67,7 @@ namespace SpaceInvadersGame
 
         public void move()
         {
-            this.positionY -= 6;
+            this.positionY -= 10;
         }
 
         public void notActive()

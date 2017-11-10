@@ -69,7 +69,7 @@ namespace SpaceInvadersGame
             return this.positionY;
         }
 
-        public int getDamageDealth()
+        public int getDamageDealt()
         {
             return this.damageDealt;
         }
@@ -91,23 +91,10 @@ namespace SpaceInvadersGame
 
         // Behavioural methods:
 
-        public void move(int leftSide, int rightSide)
+        public void move()
         {
             this.positionX += this.velocityX;
             this.positionY += 0.2; 
-        }
-
-        public void shoot()
-        {
-
-        }
-
-        public void dead()
-        {
-            this.alive = false;
-
-            this.height = 0;
-            this.width = 0;
         }
 
         public bool reachBottom(int bottomOfScreen)

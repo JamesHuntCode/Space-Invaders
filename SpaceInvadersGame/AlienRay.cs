@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceInvadersGame
 {
-    public class Canon
+    class AlienRay
     {
         private int height;
         private int width;
@@ -14,18 +14,21 @@ namespace SpaceInvadersGame
         private int positionX;
         private int positionY;
 
-        private int damageDealt = 100;
-        private int health = 100;
+        private int damageDealt;
+
+        private bool active = true;
 
         // Constructor:
 
-        public Canon(int h, int w, int posX, int posY)
+        public AlienRay(int h, int w, int posX, int posY, int damage)
         {
             this.height = h;
             this.width = w;
 
             this.positionX = posX;
             this.positionY = posY;
+
+            this.damageDealt = damage;
         }
 
         // Getter methods:
@@ -55,38 +58,24 @@ namespace SpaceInvadersGame
             return this.damageDealt;
         }
 
-        public int getHealth()
+        public bool getStatus()
         {
-            return this.health;
+            return this.active;
         }
 
         // Behavioural methods:
 
-        public void move(int direction, int leftSide, int rightSide)
+        public void move()
         {
-            if (direction == 1) // Move left
-            {
-                this.positionX -= 15;
-
-                if (this.positionX  + this.width < leftSide) // Player has moved too far left
-                {
-                    this.positionX += 15;
-                }
-            }
-            else if (direction == 2) // Move right
-            {
-                this.positionX += 15;
-
-                if (this.positionX + this.width > rightSide) // Player has moved too far right
-                {
-                    this.positionX -= 15;
-                }
-            }
+            this.positionY += 5;
         }
 
-        public void dead()
+        public void notActive()
         {
-            
+            this.active = false;
+
+            this.height = 0;
+            this.width = 0;
         }
     }
 }
